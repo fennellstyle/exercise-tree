@@ -4,7 +4,7 @@
 using namespace std;
 using namespace tree;
 int main() {
-    Tree myTree;
+    BinaryTree myTree;
     myTree.print();
     myTree.insert(17);
     myTree.print();

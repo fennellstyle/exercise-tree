@@ -25,13 +25,14 @@ namespace tree {
         node_ref_t right;
     };
 
-    class Tree {
+    class BinaryTree {
     public:
         void insert(data_t);
         void print() const;
         void print(const node_ref_t &node) const;
         const node_ref_t &getRoot() const;
-        friend std::ostream &operator<<(std::ostream &os, const Tree &tree1);
+
+        friend std::ostream &operator<<(std::ostream &os, const BinaryTree &tree1);
 
     private:
         node_ref_t m_root;
