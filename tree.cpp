@@ -2,83 +2,99 @@
 // Created by sean on 9/29/16.
 //
 
-#include <iostream>
 #include <memory>
 #include "tree.h"
-#include <sstream>
 
 namespace tree {
-    Node::Node() : data(0), left(nullptr), right(nullptr) {}
-
-    Node::Node(data_t m_data) : data(m_data), left(nullptr), right(nullptr) {}
-
-    void Node::print() const {
-        std::cout << display() << "\n";
+    node_ref_t makeNode(data_t value) {
+        return std::make_shared<Node>(Node(value));
     }
 
-    std::string Node::display() const {
-        std::stringstream ss;
-        ss << "Node(" << data << ")";
-        return ss.str();
+    Node::Node() : data{0}, left{nullptr}, right{nullptr} {}
+
+    Node::Node(data_t m_data) : data{m_data}, left{nullptr}, right{nullptr} {}
+
+    void Node::setLeft(data_t value) {
+        left = makeNode(value);
     }
 
-    void BinaryTree::print() const {
-        if (m_root == nullptr)
-        {
-            std::cout << "BinaryTree has no root." << std::endl;
-            return;
-        }
-
-        std::cout << "root: ";
-        print(m_root);
-    }
-
-// todo: use node->display()
-// todo: get this working to show tree nested
-    void BinaryTree::print(const node_ref_t &node) const {
-        if (node == nullptr) {
-            return;
-        }
-
-        node->print();
-        print(node->left);
-        print(node->right);
-    }
-
-    void BinaryTree::insert(data_t value) {
-        insert(m_root, value);
-    }
-
-    void BinaryTree::insert(node_ref_t &root, data_t value) {
-        if (root == nullptr) {
-            root = std::make_shared<Node>(Node(value));
-            return;
-        }
-
-        if (value < root->data) {
-            insert(root->left, value);
-        } else {
-            insert(root->right, value);
-        }
-    }
-
-    // todo: get this working to show tree nested
-    std::ostream &operator<<(std::ostream &os, const BinaryTree &tree1) {
-        if (tree1.m_root == nullptr) {
-            return os << "BinaryTree(empty)";
-        }
-
-        os << "BinaryTree(" << tree1.m_root->data << ")\n";
-        if (tree1.m_root->left != nullptr)
-            os <<  tree1.m_root->left->data;
-
-        if (tree1.m_root->right != nullptr)
-            os << "\t" << tree1.m_root->right->data;
-
-        return os;
+    void Node::setRight(data_t value) {
+        right = makeNode(value);
     }
 
     const node_ref_t &BinaryTree::getRoot() const {
         return m_root;
     }
+
+    node_ref_t BinaryTree::findInsertionPoint(node_ref_t parent, data_t value) {
+        auto insertionPoint = value < parent->data
+                              ? parent->left
+                              : parent->right;
+        return insertionPoint
+            ? findInsertionPoint(insertionPoint, value)
+            : parent;
+    }
+
+    void BinaryTree::insert(data_t value) {
+        if (!m_root) {
+            setRoot(value);
+            return;
+        }
+
+        auto insertIterator = m_root;
+        decltype(m_root) parent = nullptr;
+
+        while(insertIterator) {
+            parent = insertIterator;
+            insertIterator = value < insertIterator->data
+                             ? insertIterator->left
+                             : insertIterator->right;
+        }
+
+        if (value < parent->data)
+            parent->setLeft(value);
+        if (value > parent->data)
+            parent->setRight(value);
+    }
+
+    void BinaryTree::insert(node_ref_t &root, data_t value) {
+        // tempNode is the node to insert
+        auto current = node_ref_t(nullptr);
+        auto parent = node_ref_t(nullptr);
+
+        // if root is null set the root and exit
+        if (!root) {
+            root = makeNode(value);
+            return;
+        } else {
+            // set our current node to the root
+            current = root;
+        }
+
+        // iterate over all the nodes until insertion point is found
+        while(true) {
+            // track the current node as the parent
+            parent = current;
+
+            // if our value is less than the parent insert to the left
+            if (value < parent->data) {
+                // left insertion point is the left of the current node
+                current = current->left;
+                if(current->left and value > current->left->data)
+                insert(parent->left, value);
+                return;
+            } else {  // insertion point is to the right
+                // right insertion point is the right of the current node
+                current = current->right;
+                insert(parent->right, value);
+                return;
+            }
+        }
+    }
+
+    void BinaryTree::setRoot(data_t value) {
+        m_root = makeNode(value);
+
+    }
+
 }
