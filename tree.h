@@ -16,8 +16,6 @@ namespace tree {
     struct Node {
         Node();
         Node(data_t);
-        void setLeft(data_t);
-        void setRight(data_t);
 
         data_t data;
         node_ref_t left;
@@ -27,13 +25,11 @@ namespace tree {
     class BinaryTree {
     public:
         const node_ref_t &getRoot() const;
-        void setRoot(data_t);
         void insert(data_t);
 
     private:
-        node_ref_t m_root;
-        node_ref_t findInsertionPoint(node_ref_t, data_t);
         void insert(node_ref_t &, data_t);
+        node_ref_t m_root;
     };
 
 }
