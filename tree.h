@@ -6,16 +6,19 @@
 #define TREE_TREE_H
 
 #include <memory>
+#include <ostream>
 
 namespace tree {
     class Node;
     using data_t = int;
-    using node_ref_t = std::unique_ptr<Node>;
+    using node_ref_t = std::shared_ptr<Node>;
 
     struct Node {
         Node();
         Node(data_t);
-        void print();
+        void print() const;
+        std::string display() const;
+
 
         data_t data;
         node_ref_t left;
@@ -25,10 +28,16 @@ namespace tree {
     class Tree {
     public:
         void insert(data_t);
-        void print();
+        void print() const;
+        void print(const node_ref_t &node) const;
+        const node_ref_t &getRoot() const;
+        friend std::ostream &operator<<(std::ostream &os, const Tree &tree1);
+
     private:
         node_ref_t m_root;
+        void insert(node_ref_t &, data_t);
     };
+
 }
 
 #endif //TREE_TREE_H
