@@ -2,37 +2,46 @@
 // Created by sean on 9/29/16.
 //
 
-#include <iostream>
+#include <memory>
 #include "tree.h"
 
-tree::Node::Node() : data(0), left(nullptr), right(nullptr){}
-
-tree::Node::Node(tree::data_t m_data) : data(m_data), left(nullptr), right(nullptr) {}
-
-void tree::Node::print() {
-    std::cout << data << "\n";
-}
-
-void tree::Tree::print() {
-    if (m_root == nullptr) {
-        std::cout << "Tree has no root." << std::endl;
-        return;
+namespace tree {
+    template <class T>
+    typename Node<T>::node_ref_t makeNode(T value) {
+        return std::make_shared<Node<T>>(Node<T>(value));
     }
 
-    std::cout << "root: ";
-    m_root->print();
-    if (m_root->left != nullptr) {
-        std::cout << "left: ";
-        m_root->left->print();
+    template <class T>
+    Node<T>::Node() : data{}, left{nullptr}, right{nullptr} {}
+
+    template <class T>
+    Node<T>::Node(T data) : data{data}, left{nullptr}, right{nullptr} {}
+
+    template <class T>
+    const typename BinaryTree<T>::node_ref_t &BinaryTree<T>::getRoot() const {
+        return this->template m_root;
     }
 
-    if (m_root->right != nullptr) {
-        std::cout << "right: ";
-        m_root->right->print();
+    template <class T>
+    void BinaryTree<T>::insert(T value) {
+        insert(m_root, value);
     }
-}
 
-void tree::Tree::insert(tree::data_t value) {
-    m_root = tree::node_ref_t(new tree::Node(value));
-}
+    template <class T>
+    void BinaryTree<T>::insert(BinaryTree<T>::node_ref_t &root, T value) {
+        if (!root) {
+            root = makeNode<T>(value);
+            return;
+        }
 
+        if (value < root->data) {
+            insert(root->left, value);
+        } else {
+            insert(root->right, value);
+        }
+    }
+
+    template class BinaryTree<int>;
+    template class BinaryTree<float>;
+    template class BinaryTree<double>;
+}
