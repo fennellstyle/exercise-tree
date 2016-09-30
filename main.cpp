@@ -6,21 +6,21 @@ using namespace std;
 using namespace tree;
 
 int main() {
-    BinaryTree myTree;
+    BinaryTree<double> myTree;
     printPretty(myTree.getRoot(), 1, 0, cout);
-    myTree.insert(17);
-    printPretty(myTree.getRoot(), 1, 0, cout);
-
-    myTree.insert(1);
+    myTree.insert(17.1);
     printPretty(myTree.getRoot(), 1, 0, cout);
 
-    myTree.insert(12);
+    myTree.insert(1.2);
     printPretty(myTree.getRoot(), 1, 0, cout);
 
-    myTree.insert(5);
+    myTree.insert(12.3);
     printPretty(myTree.getRoot(), 1, 0, cout);
 
-    myTree.insert(25);
+    myTree.insert(5.4);
+    printPretty(myTree.getRoot(), 1, 0, cout);
+
+    myTree.insert(25.5);
     printPretty(myTree.getRoot(), 1, 0, cout);
     return 0;
 }

@@ -8,29 +8,32 @@
 #include <memory>
 
 namespace tree {
-    class Node;
-    using data_t = int;
-    using node_ref_t = std::shared_ptr<Node>;
-    node_ref_t makeNode(data_t);
-
+    template <class T>
     struct Node {
-        Node();
-        Node(data_t);
+        typedef std::shared_ptr<Node<T>> node_ref_t;
 
-        data_t data;
+        Node();
+        Node(T);
+
+        T data;
         node_ref_t left;
         node_ref_t right;
     };
 
+    template <class T>
     class BinaryTree {
     public:
+        typedef typename Node<T>::node_ref_t node_ref_t;
         const node_ref_t &getRoot() const;
-        void insert(data_t);
+        void insert(T);
 
     private:
-        void insert(node_ref_t &, data_t);
+        void insert(node_ref_t &, T);
         node_ref_t m_root;
     };
+
+    template <typename T>
+    typename Node<T>::node_ref_t makeNode(T);
 
 }
 

@@ -6,25 +6,31 @@
 #include "tree.h"
 
 namespace tree {
-    node_ref_t makeNode(data_t value) {
-        return std::make_shared<Node>(Node(value));
+    template <class T>
+    typename Node<T>::node_ref_t makeNode(T value) {
+        return std::make_shared<Node<T>>(Node<T>(value));
     }
 
-    Node::Node() : data{0}, left{nullptr}, right{nullptr} {}
+    template <class T>
+    Node<T>::Node() : data{}, left{nullptr}, right{nullptr} {}
 
-    Node::Node(data_t m_data) : data{m_data}, left{nullptr}, right{nullptr} {}
+    template <class T>
+    Node<T>::Node(T data) : data{data}, left{nullptr}, right{nullptr} {}
 
-    const node_ref_t &BinaryTree::getRoot() const {
-        return m_root;
+    template <class T>
+    const typename BinaryTree<T>::node_ref_t &BinaryTree<T>::getRoot() const {
+        return this->template m_root;
     }
 
-    void BinaryTree::insert(data_t value) {
+    template <class T>
+    void BinaryTree<T>::insert(T value) {
         insert(m_root, value);
     }
 
-    void BinaryTree::insert(node_ref_t &root, data_t value) {
+    template <class T>
+    void BinaryTree<T>::insert(BinaryTree<T>::node_ref_t &root, T value) {
         if (!root) {
-            root = makeNode(value);
+            root = makeNode<T>(value);
             return;
         }
 
@@ -35,4 +41,7 @@ namespace tree {
         }
     }
 
+    template class BinaryTree<int>;
+    template class BinaryTree<float>;
+    template class BinaryTree<double>;
 }
