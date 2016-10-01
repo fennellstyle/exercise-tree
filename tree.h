@@ -25,10 +25,9 @@ namespace tree {
     public:
         typedef typename Node<T>::node_ref_t node_ref_t;
         const node_ref_t &getRoot() const;
-        void insert(T);
+        node_ref_t &getRoot();
 
     private:
-        void insert(node_ref_t &, T);
         node_ref_t m_root;
     };
 

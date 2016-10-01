@@ -1,26 +1,28 @@
 #include <iostream>
 #include "tree.h"
+#include "tree_algorithm.h"
 #include "binary_tree_pretty_print.h"
 
 using namespace std;
 using namespace tree;
+using namespace algorithm;
 
 int main() {
     BinaryTree<double> myTree;
     printPretty(myTree.getRoot(), 1, 0, cout);
-    myTree.insert(17.1);
+    insert(myTree, 17.1);
     printPretty(myTree.getRoot(), 1, 0, cout);
 
-    myTree.insert(1.2);
+    insert(myTree, 1.2);
     printPretty(myTree.getRoot(), 1, 0, cout);
 
-    myTree.insert(12.3);
+    insert(myTree, 12.3);
     printPretty(myTree.getRoot(), 1, 0, cout);
 
-    myTree.insert(5.4);
+    insert(myTree, 5.4);
     printPretty(myTree.getRoot(), 1, 0, cout);
 
-    myTree.insert(25.5);
+    insert(myTree, 25.5);
     printPretty(myTree.getRoot(), 1, 0, cout);
     return 0;
 }
