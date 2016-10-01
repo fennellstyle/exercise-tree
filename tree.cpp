@@ -8,7 +8,7 @@
 namespace tree {
     template <class T>
     typename Node<T>::node_ref_t makeNode(T value) {
-        return std::make_shared<Node<T>>(Node<T>(value));
+        return make_unique<Node<T>>(Node<T>(value));
     }
 
     template <class T>

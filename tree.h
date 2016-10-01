@@ -7,6 +7,13 @@
 
 #include <memory>
 
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+
 namespace tree {
     template <class T>
     struct Node {
@@ -24,7 +31,7 @@ namespace tree {
     class BinaryTree {
     public:
         typedef typename Node<T>::node_ref_t node_ref_t;
-        const node_ref_t &getRoot() const;
+        const node_ref_t& getRoot() const;
         void insert(T);
 
     private:
